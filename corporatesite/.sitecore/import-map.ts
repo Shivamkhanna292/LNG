@@ -5,11 +5,15 @@ import { combineImportEntries, defaultImportEntries } from '@sitecore-content-sd
 
 import { useState, useEffect } from 'react';
 import React from 'react';
-import { Link, Text, useSitecore, AppPlaceholder, RichText, NextImage, CdpHelper, withDatasourceCheck } from '@sitecore-content-sdk/nextjs';
+import { Link, Text, useSitecore, AppPlaceholder, RichText, NextImage, withDatasourceCheck, CdpHelper } from '@sitecore-content-sdk/nextjs';
 import componentMap from '.sitecore/component-map';
-import client from 'src/lib/sitecore-client';
-import { pageView } from '@sitecore-cloudsdk/events/browser';
+import { useRouter } from 'next/navigation';
+import { event, identity, pageView } from '@sitecore-cloudsdk/events/browser';
 import config from 'sitecore.config';
+import Cookies from 'js-cookie';
+import { GetGuestDetails, UpdateGuestExtensionV2, AddGuestExtension, CheckGuestExistsInCDP, UpdateGuestExtension, UpdateGuestExtensionV6, UpdateGuestExtensionV5, UpdateGuestExtensionV3, UpdateGuestExtensionV4 } from 'src/lib/cdp/cdpService';
+import { getNextPageFromExperience } from 'src/lib/personalize/personalizeService';
+import client from 'src/lib/sitecore-client';
 
 const importMap = [
   {
@@ -29,8 +33,8 @@ const importMap = [
       { name: 'AppPlaceholder', value: AppPlaceholder },
       { name: 'RichText', value: RichText },
       { name: 'NextImage', value: NextImage },
-      { name: 'CdpHelper', value: CdpHelper },
       { name: 'withDatasourceCheck', value: withDatasourceCheck },
+      { name: 'CdpHelper', value: CdpHelper },
     ]
   },
   {
@@ -40,14 +44,16 @@ const importMap = [
     ]
   },
   {
-    module: 'src/lib/sitecore-client',
+    module: 'next/navigation',
     exports: [
-      { name: 'default', value: client },
+      { name: 'useRouter', value: useRouter },
     ]
   },
   {
     module: '@sitecore-cloudsdk/events/browser',
     exports: [
+      { name: 'event', value: event },
+      { name: 'identity', value: identity },
       { name: 'pageView', value: pageView },
     ]
   },
@@ -55,6 +61,38 @@ const importMap = [
     module: 'sitecore.config',
     exports: [
       { name: 'default', value: config },
+    ]
+  },
+  {
+    module: 'js-cookie',
+    exports: [
+      { name: 'default', value: Cookies },
+    ]
+  },
+  {
+    module: 'src/lib/cdp/cdpService',
+    exports: [
+      { name: 'GetGuestDetails', value: GetGuestDetails },
+      { name: 'UpdateGuestExtensionV2', value: UpdateGuestExtensionV2 },
+      { name: 'AddGuestExtension', value: AddGuestExtension },
+      { name: 'CheckGuestExistsInCDP', value: CheckGuestExistsInCDP },
+      { name: 'UpdateGuestExtension', value: UpdateGuestExtension },
+      { name: 'UpdateGuestExtensionV6', value: UpdateGuestExtensionV6 },
+      { name: 'UpdateGuestExtensionV5', value: UpdateGuestExtensionV5 },
+      { name: 'UpdateGuestExtensionV3', value: UpdateGuestExtensionV3 },
+      { name: 'UpdateGuestExtensionV4', value: UpdateGuestExtensionV4 },
+    ]
+  },
+  {
+    module: 'src/lib/personalize/personalizeService',
+    exports: [
+      { name: 'getNextPageFromExperience', value: getNextPageFromExperience },
+    ]
+  },
+  {
+    module: 'src/lib/sitecore-client',
+    exports: [
+      { name: 'default', value: client },
     ]
   }
 ];
