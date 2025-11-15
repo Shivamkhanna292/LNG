@@ -31,7 +31,7 @@ const Layout = ({ page }: LayoutProps): JSX.Element => {
         ) : (
           <>
             <header>
-              <div id="header">
+              <div id="header" className='lng-header'>
                 {route && (
                   <AppPlaceholder
                     page={page}
@@ -43,7 +43,7 @@ const Layout = ({ page }: LayoutProps): JSX.Element => {
               </div>
             </header>
             <main>
-              <div id="content">
+              <div id="content" className='lng-main-content'>
                 {route && (
                   <AppPlaceholder
                     page={page}
@@ -55,7 +55,7 @@ const Layout = ({ page }: LayoutProps): JSX.Element => {
               </div>
             </main>
             <footer>
-              <div id="footer">
+              <div id="footer" className='lng-footer'>
                 {route && (
                   <AppPlaceholder
                     page={page}
