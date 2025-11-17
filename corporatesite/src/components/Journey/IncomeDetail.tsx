@@ -188,12 +188,11 @@ const IncomeDetail = ({ fields }: ContentBlockProps): JSX.Element => {
           <div className="text-center">
             <button
               type="submit"
-              className={`btn btn-primary px-5 ${
-                isSubmitting ? "is-loading" : ""
-              }`}
+              className={`btn btn-primary px-5 submit-btn`}
               disabled={isSubmitting}
             >
-              Next
+              <span className="btn-text">Next</span>
+              <span className={`loader ${isSubmitting ? "" : "d-none"}`}></span>
             </button>
           </div>
         </form>

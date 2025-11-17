@@ -471,29 +471,35 @@ body {
   margin-bottom: 25px;
 }
 
-.form-container button.is-disabled,
-.form-container button.is-disabled:active,
-.form-container button.is-disabled:focus,
-.form-container button.is-disabled:hover,
-.form-container button.is-loading,
-.form-container button.is-loading:active,
-.form-container button.is-loading:focus,
-.form-container button.is-loading:hover {
-  cursor: auto;
-  color: #969fa5;
+
+/* Disabled Button */
+.btn-disabled {
+  background-color: #6c757d !important; /* Gray */
+  border: none !important;
+  cursor: not-allowed !important;
+  opacity: 0.7;
 }
-.form-container button.is-loading {
-  position: relative;
-  overflow: hidden;
+
+/* Loader (small circle spinner) */
+.loader {
+  width: 18px;
+  height: 18px;
+  border: 3px solid rgba(255, 255, 255, 0.4);
+  border-top-color: #fff;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+  display: inline-block;
+  margin-left: 10px;
+  vertical-align: middle;
 }
-.form-container button.is-loading::before {
-  content: '';
-  position: absolute;
-  left: 0;
-  bottom: 0;
-  height: 5px;
-  background: #fff;
-  will-change: left, right;
-  -webkit-animation: loading 2s cubic-bezier(0.165, 0.84, 0.44, 1) infinite;
-  animation: loading 2s cubic-bezier(0.165, 0.84, 0.44, 1) infinite;
+
+/* Spinner Keyframes */
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+/* Hide text when loading */
+.loading .btn-text {
+  display: none;
 }

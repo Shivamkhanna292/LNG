@@ -91,13 +91,19 @@ const PersonalDetail = ({ fields }: ContentBlockProps): JSX.Element => {
     try {
       let guestResponse: CDPGuestResponse | null = null;
       guestResponse = await CheckGuestExistsInCDP(formData.idNumber);
-      console.log("Personal Detail - Identified Guest Response:", guestResponse);
+      console.log(
+        "Personal Detail - Identified Guest Response:",
+        guestResponse
+      );
       if (guestResponse && guestResponse.items.length > 0) {
         const guest = guestResponse.items[0];
         guestRef = guest.ref;
       }
     } catch (err) {
-      console.error("Personal Detail - Error In Identified Guest Response:", err);
+      console.error(
+        "Personal Detail - Error In Identified Guest Response:",
+        err
+      );
     }
 
     // Set Cookies
@@ -137,12 +143,16 @@ const PersonalDetail = ({ fields }: ContentBlockProps): JSX.Element => {
 
       // Validate
       if (!nextPageURL) {
-        console.warn("Personal Detail - NextPageURL missing from experience response");
+        console.warn(
+          "Personal Detail - NextPageURL missing from experience response"
+        );
         return;
       }
 
       if (!journeySelected) {
-        console.warn("Personal Detail - JourneySelected missing from experience response");
+        console.warn(
+          "Personal Detail - JourneySelected missing from experience response"
+        );
         return;
       }
 
@@ -153,22 +163,31 @@ const PersonalDetail = ({ fields }: ContentBlockProps): JSX.Element => {
       try {
         const response = await AddGuestExtension(
           guestRef ?? "",
-          'personal-detail',
+          "personal-detail",
           journeySelected
         );
-        console.log("Personal Detail - Guest successfully added in CDP: ", response);
+        console.log(
+          "Personal Detail - Guest successfully added in CDP: ",
+          response
+        );
       } catch (err) {
         console.error("Personal Detail - Error Adding guest data in CDP:", err);
 
         try {
           const response = await UpdateGuestExtension(
             guestRef ?? "",
-            'personal-detail',
+            "personal-detail",
             journeySelected
           );
-          console.log("Personal Detail - Guest successfully updated in CDP: ", response);
+          console.log(
+            "Personal Detail - Guest successfully updated in CDP: ",
+            response
+          );
         } catch (innerErr) {
-          console.error("Personal Detail - Error in updating guest data in CDP:", innerErr);
+          console.error(
+            "Personal Detail - Error in updating guest data in CDP:",
+            innerErr
+          );
         }
       }
 
@@ -249,12 +268,11 @@ const PersonalDetail = ({ fields }: ContentBlockProps): JSX.Element => {
         <div className="text-center">
           <button
             type="submit"
-            className={`btn btn-primary px-5 ${
-              isSubmitting ? "is-loading" : ""
-            }`}
+            className={`btn btn-primary px-5 submit-btn`}
             disabled={isSubmitting}
           >
-            Next
+            <span className="btn-text">Next</span>
+            <span className={`loader ${isSubmitting ? "" : "d-none"}`}></span>
           </button>
         </div>
       </form>
