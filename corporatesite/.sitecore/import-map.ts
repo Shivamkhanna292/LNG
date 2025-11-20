@@ -8,10 +8,11 @@ import React from 'react';
 import { Link, Text, useSitecore, AppPlaceholder, RichText, NextImage, withDatasourceCheck, CdpHelper } from '@sitecore-content-sdk/nextjs';
 import componentMap from '.sitecore/component-map';
 import { useRouter } from 'next/navigation';
+import Image from 'next/image';
 import { event, identity, pageView } from '@sitecore-cloudsdk/events/browser';
 import config from 'sitecore.config';
 import Cookies from 'js-cookie';
-import { GetGuestDetails, UpdateGuestExtensionV2, AddGuestExtension, CheckGuestExistsInCDP, UpdateGuestExtension, UpdateGuestExtensionV6, UpdateGuestExtensionV5, UpdateGuestExtensionV3, UpdateGuestExtensionV4 } from 'src/lib/cdp/cdpService';
+import { UpdateGuestExtensionV2, GetGuestDetails, AddGuestExtension, CheckGuestExistsInCDP, UpdateGuestExtension, UpdateGuestExtensionV6, UpdateGuestExtensionV5, UpdateGuestExtensionV3, UpdateGuestExtensionV4 } from 'src/lib/cdp/cdpService';
 import { getNextPageFromExperience } from 'src/lib/personalize/personalizeService';
 import client from 'src/lib/sitecore-client';
 
@@ -50,6 +51,12 @@ const importMap = [
     ]
   },
   {
+    module: 'next/image',
+    exports: [
+      { name: 'default', value: Image },
+    ]
+  },
+  {
     module: '@sitecore-cloudsdk/events/browser',
     exports: [
       { name: 'event', value: event },
@@ -72,8 +79,8 @@ const importMap = [
   {
     module: 'src/lib/cdp/cdpService',
     exports: [
-      { name: 'GetGuestDetails', value: GetGuestDetails },
       { name: 'UpdateGuestExtensionV2', value: UpdateGuestExtensionV2 },
+      { name: 'GetGuestDetails', value: GetGuestDetails },
       { name: 'AddGuestExtension', value: AddGuestExtension },
       { name: 'CheckGuestExistsInCDP', value: CheckGuestExistsInCDP },
       { name: 'UpdateGuestExtension', value: UpdateGuestExtension },
