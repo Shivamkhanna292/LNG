@@ -161,6 +161,38 @@ const PersonalDetail = ({ fields }: ContentBlockProps): JSX.Element => {
       console.error("Personal Detail - Error sending event to CDP:", err);
     }
 
+    // 👉 Update guest in CDP
+    try {
+      const response = await AddGuestExtension(
+        guestRef ?? "",
+        "personal-detail",
+        ""
+      );
+      console.log(
+        "Personal Detail - Guest successfully added in CDP: ",
+        response
+      );
+    } catch (err) {
+      console.error("Personal Detail - Error Adding guest data in CDP:", err);
+
+      try {
+        const response = await UpdateGuestExtension(
+          guestRef ?? "",
+          "personal-detail",
+          ""
+        );
+        console.log(
+          "Personal Detail - Guest successfully updated in CDP: ",
+          response
+        );
+      } catch (innerErr) {
+        console.error(
+          "Personal Detail - Error in updating guest data in CDP:",
+          innerErr
+        );
+      }
+    }
+
     // 👉 Call Experience
     try {
       let experienceResponse: DecisionOffersResponse | null = null;
@@ -187,37 +219,22 @@ const PersonalDetail = ({ fields }: ContentBlockProps): JSX.Element => {
       console.log("Personal Detail - NextPageURL:", nextPageURL);
       console.log("Personal Detail - JourneySelected:", journeySelected);
 
-      // 👉 Update guest in CDP
       try {
-        const response = await AddGuestExtension(
+        const response = await UpdateGuestExtension(
           guestRef ?? "",
           "personal-detail",
           journeySelected
         );
         console.log(
-          "Personal Detail - Guest successfully added in CDP: ",
+          "Personal Detail - Guest successfully updated in CDP: ",
           response
         );
-      } catch (err) {
-        console.error("Personal Detail - Error Adding guest data in CDP:", err);
-
-        try {
-          const response = await UpdateGuestExtension(
-            guestRef ?? "",
-            "personal-detail",
-            journeySelected
-          );
-          console.log(
-            "Personal Detail - Guest successfully updated in CDP: ",
-            response
-          );
-        } catch (innerErr) {
-          console.error(
-            "Personal Detail - Error in updating guest data in CDP:",
-            innerErr
-          );
-        }
-      }
+      } catch (innerErr) {
+        console.error(
+          "Personal Detail - Error in updating guest data in CDP:",
+          innerErr
+        );
+      }      
 
       // 👉 Redirect to next page
       router.push(`/demo/${nextPageURL.replace(/^\/+/, "")}`);
