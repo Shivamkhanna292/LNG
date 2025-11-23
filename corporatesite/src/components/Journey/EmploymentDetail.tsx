@@ -1,6 +1,6 @@
 "use client";
 
-import { JSX, useState, ChangeEvent, FormEvent, useEffect } from "react";
+import { JSX, useState, ChangeEvent, FormEvent, useEffect,useRef } from "react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 import { Field, withDatasourceCheck } from "@sitecore-content-sdk/nextjs";
@@ -41,22 +41,18 @@ const EmploymentDetail = ({ fields }: ContentBlockProps): JSX.Element => {
   const router = useRouter();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [formData, setFormData] = useState({
-    employmentDetail: "",
-    bankAccountNumber: "",
+    bankName: "",
+    monthlyIncome: "",
   });
 
   const slides = [
     {
-      img: "/journey/images/slider-1.jpg",
-      title: "Home Loan Guidance for Every Credit Profile",
+      img: "/journey/images/pl-slider-1.jpg",
+      title: "Personal Loan Guidance for Every Credit Profile",
     },
     {
-      img: "/journey/images/slider-3.jpg",
+      img: "/journey/images/pl-slider-2.jpg",
       title: "Personal Loan Solutions Tailored for You",
-    },
-    {
-      img: "/journey/images/slider-2.jpg",
-      title: "Smart Credit Card Options for Better Living",
     },
   ];
 
@@ -92,8 +88,8 @@ const EmploymentDetail = ({ fields }: ContentBlockProps): JSX.Element => {
         pageVariantId,
         language,
         payload: {
-          EmploymentDetail: formData.employmentDetail,
-          BankAccountNumber: formData.bankAccountNumber,
+          BankName: formData.bankName,
+          MonthlyIncome: formData.monthlyIncome,
         },
       });
     } catch (err) {
@@ -108,8 +104,8 @@ const EmploymentDetail = ({ fields }: ContentBlockProps): JSX.Element => {
       const response = await UpdateGuestExtensionV3(
         guestRef ?? "",
         "employment-detail",
-        formData.employmentDetail,
-        formData.bankAccountNumber
+        formData.bankName,
+        formData.monthlyIncome
       );
       console.log(
         "Employment Detail - Guest successfully updated in CDP: ",
@@ -153,8 +149,8 @@ const EmploymentDetail = ({ fields }: ContentBlockProps): JSX.Element => {
         const response = await UpdateGuestExtensionV3(
           guestRef ?? "",
           nextPageURL,
-          formData.employmentDetail,
-          formData.bankAccountNumber
+          formData.bankName,
+          formData.monthlyIncome
         );
         console.log(
           "Employment Detail - Guest successfully updated in CDP: ",
@@ -176,8 +172,152 @@ const EmploymentDetail = ({ fields }: ContentBlockProps): JSX.Element => {
     setIsSubmitting(false);
   };
 
+  // -------------------------
+  // PL Carousel (React-only)
+  // -------------------------
+  const plSlides = [
+    {
+      issuer: "Premier Bank",
+      name: "Quick Cash Loan",
+      rate: "8.99%",
+      amountValue: "Up to $50K",
+      amountLabel: "24-Hour Approval",
+      styleClass: "pl-card-purple",
+    },
+    {
+      issuer: "City Finance",
+      name: "Express Loan",
+      rate: "9.49%",
+      amountValue: "Up to $35K",
+      amountLabel: "Same Day Funding",
+      styleClass: "pl-card-pink",
+    },
+    {
+      issuer: "Metro Lending",
+      name: "Instant Approval",
+      rate: "7.99%",
+      amountValue: "Up to $40K",
+      amountLabel: "No Origination Fee",
+      styleClass: "pl-card-orange",
+    },
+  ];
+
+  const [plIndex, setPlIndex] = useState(0);
+  const plTrackRef = useRef<HTMLDivElement | null>(null);
+  const plContainerRef = useRef<HTMLDivElement | null>(null);
+  const [plSlideWidth, setPlSlideWidth] = useState(0);
+  const plAutoRef = useRef<number | null>(null);
+
+  // touch/swipe refs
+  const touchStartX = useRef(0);
+  const touchCurrentX = useRef(0);
+  const isDragging = useRef(false);
+
+  // compute slide width and set transform
+  useEffect(() => {
+    const updateWidth = () => {
+      const firstSlide = plTrackRef.current?.children?.[0] as
+        | HTMLElement
+        | undefined;
+      if (firstSlide) {
+        const w = firstSlide.getBoundingClientRect().width;
+        setPlSlideWidth(w);
+      } else {
+        setPlSlideWidth(0);
+      }
+    };
+
+    updateWidth();
+    window.addEventListener("resize", updateWidth);
+    return () => window.removeEventListener("resize", updateWidth);
+  }, []);
+
+  // apply transform whenever index or width changes
+  const getPlTrackStyle = () => {
+    const translate = plIndex * plSlideWidth;
+    return {
+      transform: `translateX(-${translate}px)`,
+      transition: "transform 450ms ease",
+      willChange: "transform",
+    } as React.CSSProperties;
+  };
+
+  // autoplay
+  useEffect(() => {
+    const startAuto = () => {
+      stopAuto();
+      plAutoRef.current = window.setInterval(() => {
+        setPlIndex((prev) => (prev + 1) % plSlides.length);
+      }, 3000);
+    };
+
+    const stopAuto = () => {
+      if (plAutoRef.current) {
+        window.clearInterval(plAutoRef.current);
+        plAutoRef.current = null;
+      }
+    };
+
+    startAuto();
+    // stop on unmount
+    return () => stopAuto();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [plSlideWidth]);
+
+  // pause on hover handlers
+  const handlePlMouseEnter = () => {
+    if (plAutoRef.current) {
+      window.clearInterval(plAutoRef.current);
+      plAutoRef.current = null;
+    }
+  };
+  const handlePlMouseLeave = () => {
+    if (!plAutoRef.current) {
+      plAutoRef.current = window.setInterval(() => {
+        setPlIndex((prev) => (prev + 1) % plSlides.length);
+      }, 3000);
+    }
+  };
+
+  // touch handlers
+  const onPlTouchStart = (e: React.TouchEvent) => {
+    touchStartX.current = e.touches[0].clientX;
+    touchCurrentX.current = touchStartX.current;
+    isDragging.current = true;
+    if (plAutoRef.current) {
+      window.clearInterval(plAutoRef.current);
+      plAutoRef.current = null;
+    }
+  };
+
+  const onPlTouchMove = (e: React.TouchEvent) => {
+    if (!isDragging.current) return;
+    touchCurrentX.current = e.touches[0].clientX;
+  };
+
+  const onPlTouchEnd = () => {
+    if (!isDragging.current) return;
+    isDragging.current = false;
+    const diff = touchStartX.current - touchCurrentX.current;
+    if (Math.abs(diff) > 50) {
+      if (diff > 0) {
+        // swipe left -> next
+        setPlIndex((prev) => (prev + 1) % plSlides.length);
+      } else {
+        // swipe right -> prev
+        setPlIndex((prev) => (prev - 1 + plSlides.length) % plSlides.length);
+      }
+    }
+    // restart autoplay
+    if (!plAutoRef.current) {
+      plAutoRef.current = window.setInterval(() => {
+        setPlIndex((prev) => (prev + 1) % plSlides.length);
+      }, 3000);
+    }
+  };
+
   return (
-    <div className="daform-wrapper">
+    <div className="daform-wrapper pl-bg">
       <div className="container-fluid daform-container">
         <div className="row">
           {/* Left Section: Form */}
@@ -203,9 +343,9 @@ const EmploymentDetail = ({ fields }: ContentBlockProps): JSX.Element => {
                       type="text"
                       className="daform-input"
                       autoFocus
-                      id="employmentDetail"
-                      placeholder="Enter your employment detail"
-                      value={formData.employmentDetail}
+                      id="bankName"
+                      placeholder="Enter your bank name"
+                      value={formData.bankName}
                       onChange={handleChange}
                     />
                     <Image
@@ -220,20 +360,17 @@ const EmploymentDetail = ({ fields }: ContentBlockProps): JSX.Element => {
                     <input
                       type="text"
                       className="daform-input"
-                      id="bankAccountNumber"
-                      placeholder="Enter your bank account number"
-                      value={formData.bankAccountNumber}
+                      id="monthlyIncome"
+                      placeholder="Enter your monthly income"
+                      value={formData.monthlyIncome}
                       onChange={handleChange}
                     />
                     <Image
-                      src="/journey/images/icon-8.png"
+                      src="/journey/images/icon-5.png"
                       alt="User"
                       className="daform-input-icon"
                     />
-                  </div>
-                  <div className="daform-error-message">
-                    Please enter your full name (at least 3 characters)
-                  </div>
+                  </div>                  
                 </div>                             
                 <button
                   type="submit"
@@ -262,48 +399,97 @@ const EmploymentDetail = ({ fields }: ContentBlockProps): JSX.Element => {
             {/* Services Section (visible on mobile below form) */}
             <div className="daform-services">
               <div className="row">
-                <div className="col-4">
-                  <div className="daform-service-card">
-                    <div className="daform-service-icon-wrapper daform-bg-blue">
-                      <Image
-                        src="/journey/images/icon-service-1.png"
-                        alt="Personal Loan"
-                        className="daform-service-icon"
-                      />
+                <div className="col-12">
+                  {/* PL Carousel - React implementation */}
+                  <div className="pl-carousel-section">
+                    <div
+                      className="pl-carousel"
+                      data-carousel="1"
+                      ref={plContainerRef}
+                      onMouseEnter={handlePlMouseEnter}
+                      onMouseLeave={handlePlMouseLeave}
+                    >
+                      <div className="pl-carousel-track-container">
+                        <div
+                          className="pl-carousel-track"
+                          ref={plTrackRef}
+                          style={getPlTrackStyle()}
+                          onTouchStart={onPlTouchStart}
+                          onTouchMove={onPlTouchMove}
+                          onTouchEnd={onPlTouchEnd}
+                        >
+                          {plSlides.map((s, idx) => (
+                            <div
+                              key={idx}
+                              className={`pl-card ${s.styleClass} pl-carousel-slide`}
+                            >
+                              <div className="pl-card-left">
+                                <svg
+                                  className="pl-icon"
+                                  viewBox="0 0 24 24"
+                                  fill="none"
+                                  stroke="currentColor"
+                                  strokeWidth="2"
+                                >
+                                  <circle cx="12" cy="12" r="10"></circle>
+                                  <line x1="12" y1="8" x2="12" y2="12"></line>
+                                  <line
+                                    x1="12"
+                                    y1="16"
+                                    x2="12.01"
+                                    y2="16"
+                                  ></line>
+                                </svg>
+                                <div className="pl-card-info">
+                                  <p className="pl-issuer">{s.issuer}</p>
+                                  <h3 className="pl-card-name">{s.name}</h3>
+                                </div>
+                              </div>
+
+                              <div className="pl-card-middle">
+                                <p className="pl-rate-label">Interest Rate</p>
+                                <p className="pl-rate-value">{s.rate}</p>
+                              </div>
+
+                              <div className="pl-card-right">
+                                <p className="pl-amount-value">
+                                  {s.amountValue}
+                                </p>
+                                <p className="pl-amount-label">
+                                  {s.amountLabel}
+                                </p>
+                              </div>
+                              <div className="pl-decoration pl-decoration-1"></div>
+                              <div className="pl-decoration pl-decoration-2"></div>
+                              <div className="pl-decoration pl-decoration-3"></div>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
                     </div>
-                    <div className="daform-service-title">Personal Loan</div>
-                    <div className="daform-service-subtitle">
-                      Credit Score 750+
-                    </div>
-                  </div>
-                </div>
-                <div className="col-4">
-                  <div className="daform-service-card">
-                    <div className="daform-service-icon-wrapper daform-bg-green">
-                      <Image
-                        src="/journey/images/icon-service-2.png"
-                        alt="Credit Card"
-                        className="daform-service-icon"
-                      />
-                    </div>
-                    <div className="daform-service-title">Credit Card</div>
-                    <div className="daform-service-subtitle">
-                      Credit Score 600-750
-                    </div>
-                  </div>
-                </div>
-                <div className="col-4">
-                  <div className="daform-service-card">
-                    <div className="daform-service-icon-wrapper daform-bg-orange">
-                      <Image
-                        src="/journey/images/icon-service-3.png"
-                        alt="Home Loan"
-                        className="daform-service-icon"
-                      />
-                    </div>
-                    <div className="daform-service-title">Home Loan</div>
-                    <div className="daform-service-subtitle">
-                      Credit Score Below 600
+                    {/* Dots */}
+                    <div className="pl-carousel-dots">
+                      {plSlides.map((_, idx) => (
+                        <button
+                          key={idx}
+                          className={`pl-dot ${
+                            idx === plIndex ? "pl-active" : ""
+                          }`}
+                          onClick={() => {
+                            setPlIndex(idx);
+                            // reset autoplay
+                            if (plAutoRef.current) {
+                              window.clearInterval(plAutoRef.current);
+                              plAutoRef.current = window.setInterval(() => {
+                                setPlIndex(
+                                  (prev) => (prev + 1) % plSlides.length
+                                );
+                              }, 3000);
+                            }
+                          }}
+                          aria-label={`Go to slide ${idx + 1}`}
+                        />
+                      ))}
                     </div>
                   </div>
                 </div>

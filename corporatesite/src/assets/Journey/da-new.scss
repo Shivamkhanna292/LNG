@@ -312,7 +312,7 @@ body {
 /* Services Section */
 .daform-services {
 	padding:40px 10px 0 10px;
-	background: white;
+	/*background: white;*/
 	max-width: 560px;
 	margin: 0 auto;
 }
@@ -574,3 +574,807 @@ body {
         }
 		
  /* Credit Score Loader */
+.cc-bg{background:#e5e2e2;}
+.hl-bg{background:#ddcbad;}
+.pl-bg{background:#b6d7f2;}
+
+/*CC*/
+.cc-title {
+    font-size: 2rem;
+    font-weight: 700;
+    color: #1e293b;
+    margin-bottom: 2rem;
+}
+
+.cc-carousel-section {
+    margin-bottom: 0rem;
+}
+
+.cc-carousel-title {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: #334155;
+    margin-bottom: 1rem;
+}
+
+.cc-carousel {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.cc-carousel-track-container {
+    overflow: hidden;
+    width: 500px;
+    margin: 0 auto;
+}
+
+.cc-carousel-track {
+    display: flex;
+    transition: transform 0.3s ease-in-out;
+}
+
+.cc-carousel-slide {
+    min-width: 500px;
+    flex-shrink: 0;
+}
+
+.cc-card {
+    width: 500px;
+    height: 100px;
+    border-radius: 0.75rem;
+    padding: 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    color: white;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+
+.cc-card:hover {
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+    transform: translateY(-2px);
+}
+
+/* Card Color Variations */
+.cc-card-purple {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+}
+
+.cc-card-pink {
+    background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+}
+
+.cc-card-blue {
+    background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+}
+
+.cc-card-orange {
+    background: linear-gradient(135deg, #ff9a56 0%, #ff6a00 100%);
+}
+
+.cc-card-teal {
+    background: linear-gradient(135deg, #2dd4bf 0%, #0d9488 100%);
+}
+
+.cc-card-indigo {
+    background: linear-gradient(135deg, #818cf8 0%, #4f46e5 100%);
+}
+
+.cc-card-gold {
+    background: linear-gradient(135deg, #fbbf24 0%, #d97706 100%);
+}
+
+.cc-card-dark {
+    background: linear-gradient(135deg, #4b5563 0%, #1f2937 100%);
+}
+
+.cc-card-rose {
+    background: linear-gradient(135deg, #fb7185 0%, #e11d48 100%);
+}
+
+/* Card Sections */
+.cc-card-left {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    z-index: 10;
+}
+
+.cc-icon {
+    width: 2rem;
+    height: 2rem;
+    flex-shrink: 0;
+}
+
+.cc-card-info {
+    display: flex;
+    flex-direction: column;
+    gap: 0.125rem;
+}
+
+.cc-issuer {
+    font-size: 0.75rem;
+    opacity: 0.9;
+    line-height: 1.2;
+}
+
+.cc-card-name {
+    font-size: 1.125rem;
+    font-weight: 600;
+    line-height: 1.2;
+}
+
+.cc-card-middle {
+    text-align: center;
+    z-index: 10;
+}
+
+.cc-earn-label {
+    font-size: 0.75rem;
+    opacity: 0.9;
+    line-height: 1.2;
+}
+
+.cc-earn-value {
+    font-size: 1.25rem;
+    font-weight: 600;
+    line-height: 1.2;
+    margin-top: 0.125rem;
+}
+
+.cc-card-right {
+    text-align: right;
+    z-index: 10;
+}
+
+.cc-bonus-value {
+    font-size: 0.875rem;
+    font-weight: 600;
+    line-height: 1.2;
+}
+
+.cc-bonus-label {
+    font-size: 0.75rem;
+    opacity: 0.9;
+    line-height: 1.2;
+    margin-top: 0.125rem;
+}
+
+/* Decorative Elements */
+.cc-decoration {
+    position: absolute;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.cc-decoration-1 {
+    width: 6rem;
+    height: 6rem;
+    right: -1.5rem;
+    top: -1.5rem;
+}
+
+.cc-decoration-2 {
+    width: 5rem;
+    height: 5rem;
+    left: -1rem;
+    bottom: -1rem;
+}
+
+.cc-decoration-3 {
+    width: 4rem;
+    height: 4rem;
+    right: 33%;
+    top: 0;
+    background: rgba(255, 255, 255, 0.05);
+}
+
+/* Carousel Navigation Buttons */
+.cc-carousel-btn {
+    width: 3rem;
+    height: 3rem;
+    border: none;
+    border-radius: 50%;
+    background: white;
+    color: #334155;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    transition: all 0.2s ease;
+    flex-shrink: 0;
+}
+
+.cc-carousel-btn:hover {
+    background: #f8fafc;
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+    transform: scale(1.05);
+}
+
+.cc-carousel-btn:active {
+    transform: scale(0.95);
+}
+
+.cc-carousel-btn svg {
+    width: 1.5rem;
+    height: 1.5rem;
+    stroke-width: 2;
+}
+
+.cc-carousel-btn:disabled {
+    opacity: 0.3;
+    cursor: not-allowed;
+}
+
+.cc-carousel-btn:disabled:hover {
+    background: white;
+    transform: scale(1);
+}
+
+/* Carousel Dots */
+.cc-carousel-dots {
+    display: flex;
+    justify-content: center;
+    gap: 0.5rem;
+    margin-top: 1rem;
+}
+
+.cc-dot {
+    width: 0.5rem;
+    height: 0.5rem;
+    border-radius: 50%;
+    background: #cbd5e1;
+    border: none;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    padding: 0;
+}
+
+.cc-dot:hover {
+    background: #94a3b8;
+}
+
+.cc-dot.cc-active {
+    background: #475569;
+    width: 1.5rem;
+    border-radius: 0.25rem;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    body {
+        padding: 1rem;
+    }
+    
+    .cc-title {
+        font-size: 1.5rem;
+    }
+
+    .cc-carousel-title {
+        font-size: 1.25rem;
+    }
+
+    .cc-carousel-track-container {
+        width: 100%;
+        max-width: 500px;
+    }
+
+    .cc-carousel-slide {
+        min-width: 100%;
+    }
+
+    .cc-card {
+        width: 100%;
+    }
+
+    .cc-carousel-btn {
+        width: 2.5rem;
+        height: 2.5rem;
+    }
+
+    .cc-carousel-btn svg {
+        width: 1.25rem;
+        height: 1.25rem;
+    }
+}
+
+/*HL*/
+.hl-carousel-section {
+    margin-bottom: 0rem;
+}
+
+.hl-carousel-title {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: #334155;
+    margin-bottom: 1rem;
+}
+
+.hl-carousel {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+}
+
+.hl-carousel-track-container {
+    overflow: hidden;
+    width: 500px;
+}
+
+.hl-carousel-track {
+    display: flex;
+    transition: transform 0.3s ease-in-out;
+}
+
+.hl-carousel-slide {
+    min-width: 500px;
+    flex-shrink: 0;
+}
+
+.hl-card {
+    width: 500px;
+    height: 100px;
+    border-radius: 0.75rem;
+    padding: 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    color: white;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+
+.hl-card:hover {
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+    transform: translateY(-2px);
+}
+
+/* Card Color Variations */
+.hl-card-purple {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+}
+
+.hl-card-pink {
+    background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+}
+
+.hl-card-blue {
+    background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+}
+
+.hl-card-orange {
+    background: linear-gradient(135deg, #ff9a56 0%, #ff6a00 100%);
+}
+
+.hl-card-teal {
+    background: linear-gradient(135deg, #2dd4bf 0%, #0d9488 100%);
+}
+
+.hl-card-indigo {
+    background: linear-gradient(135deg, #818cf8 0%, #4f46e5 100%);
+}
+
+.hl-card-gold {
+    background: linear-gradient(135deg, #fbbf24 0%, #d97706 100%);
+}
+
+.hl-card-dark {
+    background: linear-gradient(135deg, #4b5563 0%, #1f2937 100%);
+}
+
+.hl-card-rose {
+    background: linear-gradient(135deg, #fb7185 0%, #e11d48 100%);
+}
+
+/* Card Sections */
+.hl-card-left {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    z-index: 10;
+}
+
+.hl-icon {
+    width: 2rem;
+    height: 2rem;
+    flex-shrink: 0;
+}
+
+.hl-card-info {
+    display: flex;
+    flex-direction: column;
+    gap: 0.125rem;
+}
+
+.hl-issuer {
+    font-size: 0.75rem;
+    opacity: 0.9;
+    line-height: 1.2;
+}
+
+.hl-card-name {
+    font-size: 1.125rem;
+    font-weight: 600;
+    line-height: 1.2;
+}
+
+.hl-card-middle {
+    text-align: center;
+    z-index: 10;
+}
+
+.hl-rate-label {
+    font-size: 0.75rem;
+    opacity: 0.9;
+    line-height: 1.2;
+}
+
+.hl-rate-value {
+    font-size: 1.25rem;
+    font-weight: 600;
+    line-height: 1.2;
+    margin-top: 0.125rem;
+}
+
+.hl-card-right {
+    text-align: right;
+    z-index: 10;
+}
+
+.hl-amount-value {
+    font-size: 0.875rem;
+    font-weight: 600;
+    line-height: 1.2;
+}
+
+.hl-amount-label {
+    font-size: 0.75rem;
+    opacity: 0.9;
+    line-height: 1.2;
+    margin-top: 0.125rem;
+}
+
+/* Decorative Elements */
+.hl-decoration {
+    position: absolute;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.hl-decoration-1 {
+    width: 6rem;
+    height: 6rem;
+    right: -1.5rem;
+    top: -1.5rem;
+}
+
+.hl-decoration-2 {
+    width: 5rem;
+    height: 5rem;
+    left: -1rem;
+    bottom: -1rem;
+}
+
+.hl-decoration-3 {
+    width: 4rem;
+    height: 4rem;
+    right: 33%;
+    top: 0;
+    background: rgba(255, 255, 255, 0.05);
+}
+
+/* Carousel Dots */
+.hl-carousel-dots {
+    display: flex;
+    justify-content: center;
+    gap: 0.5rem;
+    margin-top: 1rem;
+}
+
+.hl-dot {
+    width: 0.5rem;
+    height: 0.5rem;
+    border-radius: 50%;
+    background: #cbd5e1;
+    border: none;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    padding: 0;
+}
+
+.hl-dot:hover {
+    background: #94a3b8;
+}
+
+.hl-dot.hl-active {
+    background: #475569;
+    width: 1.5rem;
+    border-radius: 0.25rem;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    body {
+        padding: 1rem;
+    }
+    
+    .hl-title {
+        font-size: 1.5rem;
+    }
+
+    .hl-carousel-title {
+        font-size: 1.25rem;
+    }
+
+    .hl-carousel-track-container {
+        width: 100%;
+        max-width: 500px;
+    }
+
+    .hl-carousel-slide {
+        min-width: 100%;
+    }
+
+    .hl-card {
+        width: 100%;
+    }
+}
+
+/*PL*/
+.pl-carousel-section {
+    margin-bottom: 0rem;
+}
+
+.pl-carousel-title {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: #334155;
+    margin-bottom: 1rem;
+}
+
+.pl-carousel {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+}
+
+.pl-carousel-track-container {
+    overflow: hidden;
+    width: 500px;
+}
+
+.pl-carousel-track {
+    display: flex;
+    transition: transform 0.3s ease-in-out;
+}
+
+.pl-carousel-slide {
+    min-width: 500px;
+    flex-shrink: 0;
+}
+
+.pl-card {
+    width: 500px;
+    height: 100px;
+    border-radius: 0.75rem;
+    padding: 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    color: white;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+
+.pl-card:hover {
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+    transform: translateY(-2px);
+}
+
+/* Card Color Variations */
+.pl-card-purple {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+}
+
+.pl-card-pink {
+    background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+}
+
+.pl-card-blue {
+    background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+}
+
+.pl-card-orange {
+    background: linear-gradient(135deg, #ff9a56 0%, #ff6a00 100%);
+}
+
+.pl-card-teal {
+    background: linear-gradient(135deg, #2dd4bf 0%, #0d9488 100%);
+}
+
+.pl-card-indigo {
+    background: linear-gradient(135deg, #818cf8 0%, #4f46e5 100%);
+}
+
+.pl-card-gold {
+    background: linear-gradient(135deg, #fbbf24 0%, #d97706 100%);
+}
+
+.pl-card-dark {
+    background: linear-gradient(135deg, #4b5563 0%, #1f2937 100%);
+}
+
+.pl-card-rose {
+    background: linear-gradient(135deg, #fb7185 0%, #e11d48 100%);
+}
+
+/* Card Sections */
+.pl-card-left {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    z-index: 10;
+}
+
+.pl-icon {
+    width: 2rem;
+    height: 2rem;
+    flex-shrink: 0;
+}
+
+.pl-card-info {
+    display: flex;
+    flex-direction: column;
+    gap: 0.125rem;
+}
+
+.pl-issuer {
+    font-size: 0.75rem;
+    opacity: 0.9;
+    line-height: 1.2;
+}
+
+.pl-card-name {
+    font-size: 1.125rem;
+    font-weight: 600;
+    line-height: 1.2;
+}
+
+.pl-card-middle {
+    text-align: center;
+    z-index: 10;
+}
+
+.pl-rate-label {
+    font-size: 0.75rem;
+    opacity: 0.9;
+    line-height: 1.2;
+}
+
+.pl-rate-value {
+    font-size: 1.25rem;
+    font-weight: 600;
+    line-height: 1.2;
+    margin-top: 0.125rem;
+}
+
+.pl-card-right {
+    text-align: right;
+    z-index: 10;
+}
+
+.pl-amount-value {
+    font-size: 0.875rem;
+    font-weight: 600;
+    line-height: 1.2;
+}
+
+.pl-amount-label {
+    font-size: 0.75rem;
+    opacity: 0.9;
+    line-height: 1.2;
+    margin-top: 0.125rem;
+}
+
+/* Decorative Elements */
+.pl-decoration {
+    position: absolute;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.pl-decoration-1 {
+    width: 6rem;
+    height: 6rem;
+    right: -1.5rem;
+    top: -1.5rem;
+}
+
+.pl-decoration-2 {
+    width: 5rem;
+    height: 5rem;
+    left: -1rem;
+    bottom: -1rem;
+}
+
+.pl-decoration-3 {
+    width: 4rem;
+    height: 4rem;
+    right: 33%;
+    top: 0;
+    background: rgba(255, 255, 255, 0.05);
+}
+
+/* Carousel Dots */
+.pl-carousel-dots {
+    display: flex;
+    justify-content: center;
+    gap: 0.5rem;
+    margin-top: 1rem;
+}
+
+.pl-dot {
+    width: 0.5rem;
+    height: 0.5rem;
+    border-radius: 50%;
+    background: #cbd5e1;
+    border: none;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    padding: 0;
+}
+
+.pl-dot:hover {
+    background: #94a3b8;
+}
+
+.pl-dot.pl-active {
+    background: #475569;
+    width: 1.5rem;
+    border-radius: 0.25rem;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    body {
+        padding: 1rem;
+    }
+    
+    .pl-title {
+        font-size: 1.5rem;
+    }
+
+    .pl-carousel-title {
+        font-size: 1.25rem;
+    }
+
+    .pl-carousel-track-container {
+        width: 100%;
+        max-width: 500px;
+    }
+
+    .pl-carousel-slide {
+        min-width: 100%;
+    }
+
+    .pl-card {
+        width: 100%;
+    }
+}
