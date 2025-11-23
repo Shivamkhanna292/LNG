@@ -1,6 +1,13 @@
 "use client";
 
-import { JSX, useState, ChangeEvent, FormEvent, useEffect } from "react";
+import {
+  JSX,
+  useState,
+  ChangeEvent,
+  FormEvent,
+  useEffect,
+  useRef,
+} from "react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 import { Field, withDatasourceCheck } from "@sitecore-content-sdk/nextjs";
@@ -9,9 +16,7 @@ import { event } from "@sitecore-cloudsdk/events/browser";
 import { CdpHelper, useSitecore } from "@sitecore-content-sdk/nextjs";
 import config from "sitecore.config";
 import Cookies from "js-cookie";
-import {
-  UpdateGuestExtensionV5,
-} from "../../lib/cdp/cdpService";
+import { UpdateGuestExtensionV5 } from "../../lib/cdp/cdpService";
 import {
   DecisionOffersResponse,
   getNextPageFromExperience,
@@ -41,22 +46,19 @@ const IncomeDetail = ({ fields }: ContentBlockProps): JSX.Element => {
   const router = useRouter();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [formData, setFormData] = useState({
-    employmentDetail: "",
-    income: "",
+    employmentType: "",
+    annualIncome: "",
+    designation: "",
   });
 
   const slides = [
     {
-      img: "/journey/images/slider-1.jpg",
-      title: "Home Loan Guidance for Every Credit Profile",
+      img: "/journey/images/cc-slider-1.jpg",
+      title: "Credit Card Guidance for Every Credit Profile",
     },
     {
-      img: "/journey/images/slider-3.jpg",
-      title: "Personal Loan Solutions Tailored for You",
-    },
-    {
-      img: "/journey/images/slider-2.jpg",
-      title: "Smart Credit Card Options for Better Living",
+      img: "/journey/images/cc-slider-2.jpg",
+      title: "Credit Card Solutions Tailored for You",
     },
   ];
 
@@ -65,7 +67,7 @@ const IncomeDetail = ({ fields }: ContentBlockProps): JSX.Element => {
   useEffect(() => {
     const interval = setInterval(() => {
       setCurrentSlide((prev) => (prev + 1) % slides.length);
-    }, 5000);    
+    }, 5000);
 
     return () => clearInterval(interval);
   }, []);
@@ -92,8 +94,9 @@ const IncomeDetail = ({ fields }: ContentBlockProps): JSX.Element => {
         pageVariantId,
         language,
         payload: {
-          EmploymentDetail: formData.employmentDetail,
-          Income: formData.income,
+          employmentType: formData.employmentType,
+          annualIncome: formData.annualIncome,
+          designation: formData.designation,
         },
       });
     } catch (err) {
@@ -108,8 +111,8 @@ const IncomeDetail = ({ fields }: ContentBlockProps): JSX.Element => {
       const response = await UpdateGuestExtensionV5(
         guestRef ?? "",
         "income-detail",
-        formData.employmentDetail,
-        formData.income
+        formData.employmentType,
+        formData.annualIncome
       );
       console.log(
         "Income Detail - Guest successfully updated in CDP: ",
@@ -153,8 +156,8 @@ const IncomeDetail = ({ fields }: ContentBlockProps): JSX.Element => {
         const response = await UpdateGuestExtensionV5(
           guestRef ?? "",
           nextPageURL,
-          formData.employmentDetail,
-          formData.income
+          formData.employmentType,
+          formData.annualIncome
         );
         console.log(
           "Income Detail - Guest successfully updated in CDP: ",
@@ -176,8 +179,159 @@ const IncomeDetail = ({ fields }: ContentBlockProps): JSX.Element => {
     setIsSubmitting(false);
   };
 
+  // -------------------------
+  // CL Carousel (React-only)
+  // -------------------------
+  const ccSlides = [
+    {
+      issuer: "Premier Bank",
+      name: "Platinum Rewards",
+      earnValue: "3%",
+      earnLabel: "Earn",
+      bonusValue: "$200 Bonus",
+      bonusLabel: "Welcome Offer",
+      styleClass: "cc-card-purple",
+    },
+    {
+      issuer: "City Credit Union",
+      name: "Cash Plus",
+      earnValue: "2%",
+      earnLabel: "Earn",
+      bonusValue: "$150 Bonus",
+      bonusLabel: "Welcome Offer",
+      styleClass: "cc-card-pink",
+    },
+    {
+      issuer: "Metro Bank",
+      name: "Cash Master",
+      earnValue: "1.5%",
+      earnLabel: "Earn",
+      bonusValue: "$100 Bonus",
+      bonusLabel: "Welcome Offer",
+      styleClass: "cc-card-orange",
+    },
+  ];
+
+  // -------------------------
+  // CC Carousel (React-only)
+  // -------------------------
+  const [ccIndex, setCcIndex] = useState(0);
+  const ccTrackRef = useRef<HTMLDivElement | null>(null);
+  const ccContainerRef = useRef<HTMLDivElement | null>(null);
+  const [ccSlideWidth, setCcSlideWidth] = useState(0);
+  const ccAutoRef = useRef<number | null>(null);
+
+  // touch/swipe refs
+  const ccTouchStartX = useRef(0);
+  const ccTouchCurrentX = useRef(0);
+  const ccIsDragging = useRef(false);
+
+  // compute slide width
+  useEffect(() => {
+    const updateWidth = () => {
+      const firstSlide = ccTrackRef.current?.children?.[0] as
+        | HTMLElement
+        | undefined;
+      if (firstSlide) {
+        const w = firstSlide.getBoundingClientRect().width;
+        setCcSlideWidth(w);
+      } else {
+        setCcSlideWidth(0);
+      }
+    };
+
+    updateWidth();
+    window.addEventListener("resize", updateWidth);
+    return () => window.removeEventListener("resize", updateWidth);
+  }, []);
+
+  // track transform style
+  const getCcTrackStyle = () => {
+    const translate = ccIndex * ccSlideWidth;
+    return {
+      transform: `translateX(-${translate}px)`,
+      transition: "transform 450ms ease",
+      willChange: "transform",
+      display: "flex",
+    } as React.CSSProperties;
+  };
+
+  // autoplay
+  useEffect(() => {
+    const startAuto = () => {
+      stopAuto();
+      ccAutoRef.current = window.setInterval(() => {
+        setCcIndex((prev) => (prev + 1) % ccSlides.length);
+      }, 3000);
+    };
+
+    const stopAuto = () => {
+      if (ccAutoRef.current) {
+        window.clearInterval(ccAutoRef.current);
+        ccAutoRef.current = null;
+      }
+    };
+
+    startAuto();
+    return () => stopAuto();
+  }, [ccSlideWidth]);
+
+  // pause on hover
+  const handleCcMouseEnter = () => {
+    if (ccAutoRef.current) {
+      window.clearInterval(ccAutoRef.current);
+      ccAutoRef.current = null;
+    }
+  };
+  const handleCcMouseLeave = () => {
+    if (!ccAutoRef.current) {
+      ccAutoRef.current = window.setInterval(() => {
+        setCcIndex((prev) => (prev + 1) % ccSlides.length);
+      }, 3000);
+    }
+  };
+
+  // touch handlers
+  const onCcTouchStart = (e: React.TouchEvent) => {
+    ccTouchStartX.current = e.touches[0].clientX;
+    ccTouchCurrentX.current = ccTouchStartX.current;
+    ccIsDragging.current = true;
+
+    if (ccAutoRef.current) {
+      window.clearInterval(ccAutoRef.current);
+      ccAutoRef.current = null;
+    }
+  };
+
+  const onCcTouchMove = (e: React.TouchEvent) => {
+    if (!ccIsDragging.current) return;
+    ccTouchCurrentX.current = e.touches[0].clientX;
+  };
+
+  const onCcTouchEnd = () => {
+    if (!ccIsDragging.current) return;
+    ccIsDragging.current = false;
+
+    const diff = ccTouchStartX.current - ccTouchCurrentX.current;
+
+    if (Math.abs(diff) > 50) {
+      if (diff > 0) {
+        setCcIndex((prev) => (prev + 1) % ccSlides.length); // next
+      } else {
+        setCcIndex((prev) => (prev - 1 + ccSlides.length) % ccSlides.length); // prev
+      }
+    }
+
+    // restart autoplay
+    if (!ccAutoRef.current) {
+      ccAutoRef.current = window.setInterval(() => {
+        setCcIndex((prev) => (prev + 1) % ccSlides.length);
+      }, 3000);
+    }
+  };
+
   return (
-    <div className="daform-wrapper">
+    <div className="daform-wrapper cc-bg">
       <div className="container-fluid daform-container">
         <div className="row">
           {/* Left Section: Form */}
@@ -203,9 +357,9 @@ const IncomeDetail = ({ fields }: ContentBlockProps): JSX.Element => {
                       type="text"
                       className="daform-input"
                       autoFocus
-                      id="employmentDetail"
-                      placeholder="Enter your employment detail"
-                      value={formData.employmentDetail}
+                      id="employmentType"
+                      placeholder="Enter your employment type"
+                      value={formData.employmentType}
                       onChange={handleChange}
                     />
                     <Image
@@ -220,9 +374,9 @@ const IncomeDetail = ({ fields }: ContentBlockProps): JSX.Element => {
                     <input
                       type="text"
                       className="daform-input"
-                      id="income"
-                      placeholder="Enter your income"
-                      value={formData.income}
+                      id="annualIncome"
+                      placeholder="Enter your annual income"
+                      value={formData.annualIncome}
                       onChange={handleChange}
                     />
                     <Image
@@ -234,7 +388,27 @@ const IncomeDetail = ({ fields }: ContentBlockProps): JSX.Element => {
                   <div className="daform-error-message">
                     Please enter your full name (at least 3 characters)
                   </div>
-                </div>                             
+                </div>
+                <div className="daform-form-group">
+                  <div className="daform-input-wrapper">
+                    <input
+                      type="text"
+                      className="daform-input"
+                      id="designation"
+                      placeholder="Enter your designation"
+                      value={formData.designation}
+                      onChange={handleChange}
+                    />
+                    <Image
+                      src="/journey/images/icon-2.png"
+                      alt="User"
+                      className="daform-input-icon"
+                    />
+                  </div>
+                  <div className="daform-error-message">
+                    Please enter your full name (at least 3 characters)
+                  </div>
+                </div>
                 <button
                   type="submit"
                   className="daform-submit-btn"
@@ -262,48 +436,93 @@ const IncomeDetail = ({ fields }: ContentBlockProps): JSX.Element => {
             {/* Services Section (visible on mobile below form) */}
             <div className="daform-services">
               <div className="row">
-                <div className="col-4">
-                  <div className="daform-service-card">
-                    <div className="daform-service-icon-wrapper daform-bg-blue">
-                      <Image
-                        src="/journey/images/icon-service-1.png"
-                        alt="Personal Loan"
-                        className="daform-service-icon"
-                      />
+                <div className="col-12">
+                  <div className="cc-carousel-section">
+                    <div
+                      className="cc-carousel"
+                      ref={ccContainerRef}
+                      onMouseEnter={handleCcMouseEnter}
+                      onMouseLeave={handleCcMouseLeave}
+                    >
+                      <div className="cc-carousel-track-container">
+                        <div
+                          className="cc-carousel-track"
+                          ref={ccTrackRef}
+                          style={getCcTrackStyle()}
+                          onTouchStart={onCcTouchStart}
+                          onTouchMove={onCcTouchMove}
+                          onTouchEnd={onCcTouchEnd}
+                        >
+                          {ccSlides.map((s, idx) => (
+                            <div
+                              key={idx}
+                              className={`cc-card ${s.styleClass} cc-carousel-slide`}
+                            >
+                              <div className="cc-card-left">
+                                <svg
+                                  className="cc-icon"
+                                  viewBox="0 0 24 24"
+                                  fill="none"
+                                  stroke="currentColor"
+                                  strokeWidth="2"
+                                >
+                                  <rect
+                                    x="1"
+                                    y="4"
+                                    width="22"
+                                    height="16"
+                                    rx="2"
+                                    ry="2"
+                                  ></rect>
+                                  <line x1="1" y1="10" x2="23" y2="10"></line>
+                                </svg>
+                                <div className="cc-card-info">
+                                  <p className="cc-issuer">{s.issuer}</p>
+                                  <h3 className="cc-card-name">{s.name}</h3>
+                                </div>
+                              </div>
+
+                              <div className="cc-card-middle">
+                                <p className="cc-earn-label">{s.earnLabel}</p>
+                                <p className="cc-earn-value">{s.earnValue}</p>
+                              </div>
+
+                              <div className="cc-card-right">
+                                <p className="cc-bonus-value">{s.bonusValue}</p>
+                                <p className="cc-bonus-label">{s.bonusLabel}</p>
+                              </div>
+
+                              <div className="cc-decoration cc-decoration-1"></div>
+                              <div className="cc-decoration cc-decoration-2"></div>
+                              <div className="cc-decoration cc-decoration-3"></div>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
                     </div>
-                    <div className="daform-service-title">Personal Loan</div>
-                    <div className="daform-service-subtitle">
-                      Credit Score 750+
-                    </div>
-                  </div>
-                </div>
-                <div className="col-4">
-                  <div className="daform-service-card">
-                    <div className="daform-service-icon-wrapper daform-bg-green">
-                      <Image
-                        src="/journey/images/icon-service-2.png"
-                        alt="Credit Card"
-                        className="daform-service-icon"
-                      />
-                    </div>
-                    <div className="daform-service-title">Credit Card</div>
-                    <div className="daform-service-subtitle">
-                      Credit Score 600-750
-                    </div>
-                  </div>
-                </div>
-                <div className="col-4">
-                  <div className="daform-service-card">
-                    <div className="daform-service-icon-wrapper daform-bg-orange">
-                      <Image
-                        src="/journey/images/icon-service-3.png"
-                        alt="Home Loan"
-                        className="daform-service-icon"
-                      />
-                    </div>
-                    <div className="daform-service-title">Home Loan</div>
-                    <div className="daform-service-subtitle">
-                      Credit Score Below 600
+
+                    {/* Dots */}
+                    <div className="cc-carousel-dots">
+                      {ccSlides.map((_, idx) => (
+                        <button
+                          key={idx}
+                          className={`cc-dot ${
+                            idx === ccIndex ? "cc-active" : ""
+                          }`}
+                          onClick={() => {
+                            setCcIndex(idx);
+                            // reset autoplay
+                            if (ccAutoRef.current) {
+                              window.clearInterval(ccAutoRef.current);
+                              ccAutoRef.current = window.setInterval(() => {
+                                setCcIndex(
+                                  (prev) => (prev + 1) % ccSlides.length
+                                );
+                              }, 3000);
+                            }
+                          }}
+                        />
+                      ))}
                     </div>
                   </div>
                 </div>

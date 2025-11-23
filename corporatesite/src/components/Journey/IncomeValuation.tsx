@@ -1,6 +1,6 @@
 "use client";
 
-import { JSX, useState, ChangeEvent, FormEvent, useEffect } from "react";
+import { JSX, useState, ChangeEvent, FormEvent, useEffect,useRef } from "react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 import { Field, withDatasourceCheck } from "@sitecore-content-sdk/nextjs";
@@ -41,22 +41,20 @@ const IncomeDetail = ({ fields }: ContentBlockProps): JSX.Element => {
   const router = useRouter();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [formData, setFormData] = useState({
-    income: "",
-    valuation: "",
+    totalExperienceYears: "",
+    experienceInCurrentCompanyYears: "",
+    monthlyGrossSalary: "",
+    monthlyNetSalary: ""
   });
 
   const slides = [
     {
-      img: "/journey/images/slider-1.jpg",
+      img: "/journey/images/hl-slider-1.jpg",
       title: "Home Loan Guidance for Every Credit Profile",
     },
     {
-      img: "/journey/images/slider-3.jpg",
-      title: "Personal Loan Solutions Tailored for You",
-    },
-    {
-      img: "/journey/images/slider-2.jpg",
-      title: "Smart Credit Card Options for Better Living",
+      img: "/journey/images/hl-slider-2.jpg",
+      title: "Home Loan Solutions Tailored for You",
     },
   ];
 
@@ -92,8 +90,10 @@ const IncomeDetail = ({ fields }: ContentBlockProps): JSX.Element => {
         pageVariantId,
         language,
         payload: {
-          Income: formData.income,
-          Valuation: formData.valuation,
+          totalExperienceYears: formData.totalExperienceYears,
+          experienceInCurrentCompanyYears: formData.experienceInCurrentCompanyYears,
+          monthlyGrossSalary: formData.monthlyGrossSalary,
+          monthlyNetSalary: formData.monthlyNetSalary,
         },
       });
     } catch (err) {
@@ -108,8 +108,8 @@ const IncomeDetail = ({ fields }: ContentBlockProps): JSX.Element => {
       const response = await UpdateGuestExtensionV6(
         guestRef ?? "",
         "income-valuation",
-        formData.income,
-        formData.valuation
+        formData.monthlyNetSalary,
+        formData.monthlyGrossSalary
       );
       console.log(
         "Income Valuation - Guest successfully updated in CDP: ",
@@ -153,8 +153,8 @@ const IncomeDetail = ({ fields }: ContentBlockProps): JSX.Element => {
         const response = await UpdateGuestExtensionV6(
           guestRef ?? "",
           nextPageURL,
-          formData.income,
-          formData.valuation
+          formData.monthlyNetSalary,
+          formData.monthlyGrossSalary
         );
         console.log(
           "Income Valuation - Guest successfully updated in CDP: ",
@@ -176,8 +176,155 @@ const IncomeDetail = ({ fields }: ContentBlockProps): JSX.Element => {
     setIsSubmitting(false);
   };
 
+ // -------------------------
+  // HL Carousel (React-only)
+  // -------------------------
+  const hlSlides = [
+    {
+      issuer: "Premier Lending",
+      name: "Starter Home Loan",
+      rateValue: "5.99%",
+      rateLabel: "Interest Rate",
+      amountValue: "Up to $500K",
+      amountLabel: "Loan Amount",
+      styleClass: "hl-card-purple",
+    },
+    {
+      issuer: "City Home Finance",
+      name: "Easy Approval",
+      rateValue: "6.25%",
+      rateLabel: "Interest Rate",
+      amountValue: "5% Down",
+      amountLabel: "Low Down Payment",
+      styleClass: "hl-card-pink",
+    },
+    {
+      issuer: "Metro Mortgage",
+      name: "FHA Special",
+      rateValue: "5.75%",
+      rateLabel: "Interest Rate",
+      amountValue: "3.5% Down",
+      amountLabel: "FHA Qualified",
+      styleClass: "hl-card-orange",
+    },
+  ];
+
+  const [hlIndex, setHlIndex] = useState(0);
+  const hlTrackRef = useRef<HTMLDivElement | null>(null);
+  const hlContainerRef = useRef<HTMLDivElement | null>(null);
+  const [hlSlideWidth, setHlSlideWidth] = useState(0);
+  const hlAutoRef = useRef<number | null>(null);
+
+  // touch/swipe refs
+  const hlTouchStartX = useRef(0);
+  const hlTouchCurrentX = useRef(0);
+  const hlIsDragging = useRef(false);
+
+  // compute slide width
+  useEffect(() => {
+    const updateWidth = () => {
+      const firstSlide = hlTrackRef.current?.children?.[0] as
+        | HTMLElement
+        | undefined;
+      if (firstSlide) {
+        setHlSlideWidth(firstSlide.getBoundingClientRect().width);
+      } else {
+        setHlSlideWidth(0);
+      }
+    };
+
+    updateWidth();
+    window.addEventListener("resize", updateWidth);
+    return () => window.removeEventListener("resize", updateWidth);
+  }, []);
+
+  // apply transform
+  const getHlTrackStyle = () => {
+    const translate = hlIndex * hlSlideWidth;
+    return {
+      transform: `translateX(-${translate}px)`,
+      transition: "transform 450ms ease",
+      willChange: "transform",
+    } as React.CSSProperties;
+  };
+
+  // autoplay
+  useEffect(() => {
+    const startAuto = () => {
+      stopAuto();
+      hlAutoRef.current = window.setInterval(() => {
+        setHlIndex((prev) => (prev + 1) % hlSlides.length);
+      }, 3000);
+    };
+
+    const stopAuto = () => {
+      if (hlAutoRef.current) {
+        window.clearInterval(hlAutoRef.current);
+        hlAutoRef.current = null;
+      }
+    };
+
+    startAuto();
+    return () => stopAuto();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [hlSlideWidth]);
+
+  // pause on hover
+  const handleHlMouseEnter = () => {
+    if (hlAutoRef.current) {
+      window.clearInterval(hlAutoRef.current);
+      hlAutoRef.current = null;
+    }
+  };
+
+  const handleHlMouseLeave = () => {
+    if (!hlAutoRef.current) {
+      hlAutoRef.current = window.setInterval(() => {
+        setHlIndex((prev) => (prev + 1) % hlSlides.length);
+      }, 3000);
+    }
+  };
+
+  // touch support
+  const onHlTouchStart = (e: React.TouchEvent) => {
+    hlTouchStartX.current = e.touches[0].clientX;
+    hlTouchCurrentX.current = hlTouchStartX.current;
+    hlIsDragging.current = true;
+    if (hlAutoRef.current) {
+      window.clearInterval(hlAutoRef.current);
+      hlAutoRef.current = null;
+    }
+  };
+
+  const onHlTouchMove = (e: React.TouchEvent) => {
+    if (!hlIsDragging.current) return;
+    hlTouchCurrentX.current = e.touches[0].clientX;
+  };
+
+  const onHlTouchEnd = () => {
+    if (!hlIsDragging.current) return;
+    hlIsDragging.current = false;
+
+    const diff = hlTouchStartX.current - hlTouchCurrentX.current;
+
+    if (Math.abs(diff) > 50) {
+      if (diff > 0) {
+        setHlIndex((prev) => (prev + 1) % hlSlides.length);
+      } else {
+        setHlIndex((prev) => (prev - 1 + hlSlides.length) % hlSlides.length);
+      }
+    }
+
+    // restart autoplay
+    if (!hlAutoRef.current) {
+      hlAutoRef.current = window.setInterval(() => {
+        setHlIndex((prev) => (prev + 1) % hlSlides.length);
+      }, 3000);
+    }
+  };
+
   return (
-    <div className="daform-wrapper">
+    <div className="daform-wrapper hl-bg">
       <div className="container-fluid daform-container">
         <div className="row">
           {/* Left Section: Form */}
@@ -202,13 +349,13 @@ const IncomeDetail = ({ fields }: ContentBlockProps): JSX.Element => {
                     <input
                       type="text"
                       className="daform-input"
-                      id="income"
-                      placeholder="Enter your income"
-                      value={formData.income}
+                      id="totalExperienceYears"
+                      placeholder="Enter your total experience (years)"
+                      value={formData.totalExperienceYears}
                       onChange={handleChange}
                     />
                     <Image
-                      src="/journey/images/icon-5.png"
+                      src="/journey/images/icon-1.png"
                       alt="User"
                       className="daform-input-icon"
                     />
@@ -223,9 +370,27 @@ const IncomeDetail = ({ fields }: ContentBlockProps): JSX.Element => {
                       type="text"
                       className="daform-input"
                       autoFocus
-                      id="valuation"
-                      placeholder="Enter valuation amount"
-                      value={formData.valuation}
+                      id="experienceInCurrentCompanyYears"
+                      placeholder="Enter experience in current company (years)"
+                      value={formData.experienceInCurrentCompanyYears}
+                      onChange={handleChange}
+                    />
+                    <Image
+                      src="/journey/images/icon-1.png"
+                      alt="ID"
+                      className="daform-input-icon"
+                    />
+                  </div>
+                </div>       
+                <div className="daform-form-group">
+                  <div className="daform-input-wrapper">
+                    <input
+                      type="text"
+                      className="daform-input"
+                      autoFocus
+                      id="monthlyGrossSalary"
+                      placeholder="Enter your monthly gross salary"
+                      value={formData.monthlyGrossSalary}
                       onChange={handleChange}
                     />
                     <Image
@@ -234,7 +399,25 @@ const IncomeDetail = ({ fields }: ContentBlockProps): JSX.Element => {
                       className="daform-input-icon"
                     />
                   </div>
-                </div>                       
+                </div>           
+                <div className="daform-form-group">
+                  <div className="daform-input-wrapper">
+                    <input
+                      type="text"
+                      className="daform-input"
+                      autoFocus
+                      id="monthlyNetSalary"
+                      placeholder="Enter your monthly net salary"
+                      value={formData.monthlyNetSalary}
+                      onChange={handleChange}
+                    />
+                    <Image
+                      src="/journey/images/icon-5.png"
+                      alt="ID"
+                      className="daform-input-icon"
+                    />
+                  </div>
+                </div>                   
                 <button
                   type="submit"
                   className="daform-submit-btn"
@@ -262,48 +445,94 @@ const IncomeDetail = ({ fields }: ContentBlockProps): JSX.Element => {
             {/* Services Section (visible on mobile below form) */}
             <div className="daform-services">
               <div className="row">
-                <div className="col-4">
-                  <div className="daform-service-card">
-                    <div className="daform-service-icon-wrapper daform-bg-blue">
-                      <Image
-                        src="/journey/images/icon-service-1.png"
-                        alt="Personal Loan"
-                        className="daform-service-icon"
-                      />
+                <div className="col-12">
+                  {/* HL Carousel - React version */}
+                  <div className="hl-carousel-section">
+                    <div
+                      className="hl-carousel"
+                      data-carousel="1"
+                      ref={hlContainerRef}
+                      onMouseEnter={handleHlMouseEnter}
+                      onMouseLeave={handleHlMouseLeave}
+                    >
+                      <div className="hl-carousel-track-container">
+                        <div
+                          className="hl-carousel-track"
+                          ref={hlTrackRef}
+                          style={getHlTrackStyle()}
+                          onTouchStart={onHlTouchStart}
+                          onTouchMove={onHlTouchMove}
+                          onTouchEnd={onHlTouchEnd}
+                        >
+                          {hlSlides.map((s, idx) => (
+                            <div
+                              key={idx}
+                              className={`hl-card ${s.styleClass} hl-carousel-slide`}
+                            >
+                              {/* LEFT */}
+                              <div className="hl-card-left">
+                                <svg
+                                  className="hl-icon"
+                                  viewBox="0 0 24 24"
+                                  fill="none"
+                                  stroke="currentColor"
+                                  strokeWidth="2"
+                                >
+                                  <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+                                  <polyline points="9 22 9 12 15 12 15 22"></polyline>
+                                </svg>
+
+                                <div className="hl-card-info">
+                                  <p className="hl-issuer">{s.issuer}</p>
+                                  <h3 className="hl-card-name">{s.name}</h3>
+                                </div>
+                              </div>
+
+                              {/* MIDDLE */}
+                              <div className="hl-card-middle">
+                                <p className="hl-rate-label">{s.rateLabel}</p>
+                                <p className="hl-rate-value">{s.rateValue}</p>
+                              </div>
+
+                              {/* RIGHT */}
+                              <div className="hl-card-right">
+                                <p className="hl-amount-value">
+                                  {s.amountValue}
+                                </p>
+                                <p className="hl-amount-label">
+                                  {s.amountLabel}
+                                </p>
+                              </div>
+
+                              {/* DECORATIONS */}
+                              <div className="hl-decoration hl-decoration-1"></div>
+                              <div className="hl-decoration hl-decoration-2"></div>
+                              <div className="hl-decoration hl-decoration-3"></div>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
                     </div>
-                    <div className="daform-service-title">Personal Loan</div>
-                    <div className="daform-service-subtitle">
-                      Credit Score 750+
-                    </div>
-                  </div>
-                </div>
-                <div className="col-4">
-                  <div className="daform-service-card">
-                    <div className="daform-service-icon-wrapper daform-bg-green">
-                      <Image
-                        src="/journey/images/icon-service-2.png"
-                        alt="Credit Card"
-                        className="daform-service-icon"
-                      />
-                    </div>
-                    <div className="daform-service-title">Credit Card</div>
-                    <div className="daform-service-subtitle">
-                      Credit Score 600-750
-                    </div>
-                  </div>
-                </div>
-                <div className="col-4">
-                  <div className="daform-service-card">
-                    <div className="daform-service-icon-wrapper daform-bg-orange">
-                      <Image
-                        src="/journey/images/icon-service-3.png"
-                        alt="Home Loan"
-                        className="daform-service-icon"
-                      />
-                    </div>
-                    <div className="daform-service-title">Home Loan</div>
-                    <div className="daform-service-subtitle">
-                      Credit Score Below 600
+
+                    {/* Dots */}
+                    <div className="hl-carousel-dots">
+                      {hlSlides.map((_, idx) => (
+                        <button
+                          key={idx}
+                          className={`hl-dot ${
+                            idx === hlIndex ? "hl-active" : ""
+                          }`}
+                          onClick={() => {
+                            setHlIndex(idx);
+                            if (hlAutoRef.current) {
+                              window.clearInterval(hlAutoRef.current);
+                              hlAutoRef.current = window.setInterval(() => {
+                                setHlIndex((p) => (p + 1) % hlSlides.length);
+                              }, 3000);
+                            }
+                          }}
+                        />
+                      ))}
                     </div>
                   </div>
                 </div>

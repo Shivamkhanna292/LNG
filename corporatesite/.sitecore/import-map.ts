@@ -3,7 +3,7 @@
 import { combineImportEntries, defaultImportEntries } from '@sitecore-content-sdk/nextjs/codegen';
 // end of built-in imports
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import React from 'react';
 import { Link, Text, useSitecore, AppPlaceholder, RichText, NextImage, withDatasourceCheck, CdpHelper } from '@sitecore-content-sdk/nextjs';
 import componentMap from '.sitecore/component-map';
@@ -22,6 +22,7 @@ const importMap = [
     exports: [
       { name: 'useState', value: useState },
       { name: 'useEffect', value: useEffect },
+      { name: 'useRef', value: useRef },
       { name: 'default', value: React },
     ]
   },
