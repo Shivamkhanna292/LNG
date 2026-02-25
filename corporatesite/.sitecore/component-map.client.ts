@@ -14,6 +14,7 @@ import * as HomeLoan from 'src/components/Journey/HomeLoan';
 import * as EmploymentDetail from 'src/components/Journey/EmploymentDetail';
 import * as CreditCard from 'src/components/Journey/CreditCard';
 import * as Image from 'src/components/image/Image';
+import * as GetMoneyList from 'src/components/Get Money Folder/GetMoneyList';
 
 export const componentMap = new Map<string, NextjsContentSdkComponent>([
   ['BYOCWrapper', BYOCClientWrapper],
@@ -30,6 +31,7 @@ export const componentMap = new Map<string, NextjsContentSdkComponent>([
   ['EmploymentDetail', { ...EmploymentDetail }],
   ['CreditCard', { ...CreditCard }],
   ['Image', { ...Image }],
+  ['GetMoneyList', { ...GetMoneyList }],
 ]);
 
 export default componentMap;

@@ -1,0 +1,547 @@
+/* Main App Container */
+body, * {
+    font-family: "Poppins", sans-serif;
+}
+.jm-app {
+  min-height: 100vh;
+  /*background-color: #e8e8e8;*/
+  padding: 20px;
+  font-family: "Poppins", sans-serif;
+}
+
+.jm-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  background-color: #f5f5f5;
+  border-radius: 8px;
+  padding: 20px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Header */
+.jm-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px 20px;
+  background-color: white;
+  border-radius: 8px 8px 0 0;
+  margin-bottom: 20px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.jm-title {
+  display: inline-block;
+    color: #22222c;
+    font-weight: 700;
+    text-align: left;
+    background-color: #fff;
+    font-size: 22px;
+  margin: 0;
+  text-decoration: none;
+    border-bottom: 3px solid #E59A2C;
+}
+
+.jm-toggle-btn {
+  background: none;
+  border: none;
+  font-size: 20px;
+  cursor: pointer;
+  padding: 5px 10px;
+  color: #333;
+  transition: transform 0.3s ease;
+}
+
+.jm-toggle-btn.jm-expanded {
+  transform: rotate(0deg);
+}
+
+.jm-toggle-btn:not(.jm-expanded) {
+  transform: rotate(180deg);
+}
+
+/* Cards Grid */
+.jm-cards-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20px;
+}
+
+/* Individual Card */
+.jm-card {
+  background-color: white;
+  border-radius: 8px;
+  padding: 20px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+  display: flex;
+  flex-direction: row;
+  gap: 20px;
+  align-items: flex-start;
+}
+
+.jm-card-left {
+  flex-shrink: 0;
+  width: 140px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.jm-card-right {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.jm-card-header {
+  margin-bottom: 12px;
+}
+
+.jm-logo {
+  width: 140px;
+  height: 80px;
+  object-fit: contain;
+}
+
+.jm-card-title {
+  font-size: 22px;
+  font-weight: 600;
+  color: #1a1a1a;
+  margin: 0 0 8px 0;
+  line-height: 1.3;
+}
+
+/* Badge */
+.jm-badge {
+  display: inline-block;
+  padding: 4px 10px;
+  border-radius: 4px;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.jm-badge-success {
+  background-color: #e8f5e9;
+  color: #2e7d32;
+  border: 1px solid #66bb6a;
+}
+
+.jm-badge-warning {
+  background-color: #f5f5f5;
+  color: #666;
+  border: 1px solid #ccc;
+}
+
+/* Card Body */
+.jm-card-body {
+  flex: 1;
+  margin-bottom: 15px;
+}
+
+.jm-description {
+  font-size: 14px;
+  line-height: 1.6;
+  color: #555;
+  margin: 0;
+}
+
+/* Card Footer */
+.jm-card-footer {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: auto;
+}
+
+/* Buttons */
+.jm-btn {
+  padding: 10px 30px;
+  border-radius: 25px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  border: none;
+  transition: all 0.3s ease;
+  text-align: center;
+}
+
+.jm-btn-primary {
+  background: linear-gradient(135deg, #ffa726 0%, #fb8c00 100%);
+  color: white;
+}
+
+.jm-btn-primary:hover {
+  background: linear-gradient(135deg, #fb8c00 0%, #f57c00 100%);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(251, 140, 0, 0.4);
+}
+
+.jm-btn-secondary {
+  background: linear-gradient(135deg, #ffa726 0%, #fb8c00 100%);
+  color: white;
+}
+
+.jm-btn-secondary:hover {
+  background: linear-gradient(135deg, #fb8c00 0%, #f57c00 100%);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(251, 140, 0, 0.4);
+}
+
+.jm-btn-block {
+  width: 100%;
+}
+
+/* Modal */
+.jm-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.6);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  padding: 20px;
+  animation: jm-fadeIn 0.3s ease;
+}
+
+@keyframes jm-fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.jm-modal {
+  background-color: white;
+  border-radius: 12px;
+  width: 100%;
+  max-width: 500px;
+  max-height: 90vh;
+  overflow-y: auto;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+  animation: jm-slideUp 0.3s ease;
+}
+
+.jm-modal-offer {
+  max-width: 600px;
+}
+
+@keyframes jm-slideUp {
+  from {
+    transform: translateY(50px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.jm-modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px 25px;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.jm-modal-header-logo {
+  border-bottom: none;
+  padding: 25px 30px;
+}
+
+.jm-modal-logo-container {
+  flex: 1;
+}
+
+.jm-modal-logo {
+  height: 30px;
+  object-fit: contain;
+}
+
+.jm-modal-title {
+  font-size: 22px;
+  font-weight: 600;
+  color: #1a1a1a;
+  margin: 0;
+}
+
+.jm-modal-close {
+  background: none;
+  border: none;
+  font-size: 32px;
+  line-height: 1;
+  cursor: pointer;
+  color: #666;
+  padding: 0;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  transition: all 0.2s ease;
+}
+
+.jm-modal-close:hover {
+  background-color: #f5f5f5;
+  color: #333;
+}
+
+.jm-modal-body {
+  padding: 25px;
+}
+
+.jm-modal-provider {
+  font-size: 16px;
+  font-weight: 600;
+  color: #fb8c00;
+  margin: 0 0 20px 0;
+}
+
+/* Form */
+.jm-form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.jm-form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.jm-label {
+  font-size: 14px;
+  font-weight: 600;
+  color: #333;
+}
+
+.jm-input {
+  padding: 12px 15px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  font-size: 14px;
+  color: #333;
+  transition: all 0.3s ease;
+  background-color: white;
+}
+
+.jm-input:focus {
+  outline: none;
+  border-color: #fb8c00;
+  box-shadow: 0 0 0 3px rgba(251, 140, 0, 0.1);
+}
+
+.jm-input::placeholder {
+  color: #999;
+}
+
+/* Offer Modal Specific Styles */
+.jm-modal-body-offer {
+  padding:0 30px 35px;
+}
+
+.jm-offer-section {
+  margin-bottom: 10px;
+}
+
+.jm-offer-title {
+  font-size: 18px;
+  font-weight: 600;
+  color: #fb8c00;
+  margin: 0 0 10px 0;
+}
+
+.jm-offer-value {
+  font-size: 16px;
+  color: #333;
+  margin: 0;
+  line-height: 1.5;
+}
+
+.jm-offer-button-container {
+  display: flex;
+  justify-content: flex-end;
+  margin: 30px 0 25px;
+}
+
+.jm-btn-go {
+  padding: 12px 50px;
+  border-radius: 30px;
+  font-size: 16px;
+  font-weight: 700;
+}
+
+.jm-offer-disclaimer {
+  margin-top: 25px;
+  padding-top: 20px;
+  border-top: 1px solid #e0e0e0;
+}
+
+.jm-offer-disclaimer p {
+  font-size: 11px;
+  line-height: 1.6;
+  color: #666;
+  margin: 0;
+}
+
+/* Callback Modal Specific Styles */
+.jm-modal-callback {
+  max-width: 600px;
+}
+
+.jm-modal-body-callback {
+  padding: 0;
+}
+
+.jm-callback-message {
+  background-color: #d4edda;
+  padding: 30px 25px;
+  border-bottom-left-radius: 12px;
+  border-bottom-right-radius: 12px;
+}
+
+.jm-callback-message p {
+  font-size: 15px;
+  color: #155724;
+  margin: 0;
+  line-height: 1.5;
+}
+
+/* Mobile Responsive */
+@media (max-width: 768px) {
+  .jm-app {
+    padding: 10px;
+  }
+
+  .jm-container {
+    padding: 15px;
+  }
+
+  .jm-header {
+    padding: 12px 15px;
+  }
+
+  .jm-title {
+    font-size: 20px;
+  }
+
+  .jm-cards-grid {
+    grid-template-columns: 1fr;
+    gap: 15px;
+  }
+
+  .jm-card {
+    padding: 15px;
+    flex-direction: column;
+    gap: 15px;
+  }
+
+  .jm-card-left {
+    width: 100%;
+    justify-content: flex-start;
+  }
+
+  .jm-logo {
+    width: 120px;
+    height: 60px;
+  }
+
+  .jm-card-title {
+    font-size: 18px;
+  }
+
+  .jm-description {
+    font-size: 13px;
+  }
+
+  .jm-btn {
+    padding: 10px 24px;
+    font-size: 13px;
+  }
+
+  .jm-modal {
+    margin: 10px;
+    max-height: 95vh;
+  }
+
+  .jm-modal-header {
+    padding: 15px 20px;
+  }
+
+  .jm-modal-title {
+    font-size: 18px;
+  }
+
+  .jm-modal-body {
+    padding: 20px;
+  }
+
+  .jm-modal-close {
+    font-size: 28px;
+    width: 28px;
+    height: 28px;
+  }
+
+  .jm-callback-message {
+    padding: 25px 20px;
+  }
+
+  .jm-callback-message p {
+    font-size: 15px;
+  }
+}
+
+@media (max-width: 480px) {
+  .jm-app {
+    padding: 5px;
+  }
+
+  .jm-container {
+    padding: 10px;
+    border-radius: 0;
+  }
+
+  .jm-title {
+    font-size: 18px;
+  }
+
+  .jm-card {
+    padding: 12px;
+  }
+
+  .jm-logo {
+    width: 100px;
+    height: 50px;
+  }
+
+  .jm-card-title {
+    font-size: 16px;
+  }
+
+  .jm-description {
+    font-size: 12px;
+  }
+
+  .jm-btn {
+    padding: 8px 20px;
+    font-size: 12px;
+  }
+
+  .jm-modal-overlay {
+    padding: 10px;
+  }
+
+  .jm-input {
+    padding: 10px 12px;
+    font-size: 13px;
+  }
+}
