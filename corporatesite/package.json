@@ -26,7 +26,7 @@
     "@sitecore-content-sdk/nextjs": "^1.0.0",
     "@types/js-cookie": "^3.0.6",
     "js-cookie": "^3.0.5",
-    "next": "^15.5.0",
+    "next": "^15.5.7",
     "next-intl": "^4.3.5",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
