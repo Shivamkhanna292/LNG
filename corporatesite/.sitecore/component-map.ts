@@ -20,6 +20,7 @@ import * as HomeLoan from 'src/components/Journey/HomeLoan';
 import * as EmploymentDetail from 'src/components/Journey/EmploymentDetail';
 import * as CreditCard from 'src/components/Journey/CreditCard';
 import * as Image from 'src/components/image/Image';
+import * as GetMoneyList from 'src/components/Get Money Folder/GetMoneyList';
 import * as ContentBlock from 'src/components/content-block/ContentBlock';
 import * as Container from 'src/components/container/Container';
 import * as ColumnSplitter from 'src/components/column-splitter/ColumnSplitter';
@@ -44,6 +45,7 @@ export const componentMap = new Map<string, NextjsContentSdkComponent>([
   ['EmploymentDetail', { ...EmploymentDetail, componentType: 'client' }],
   ['CreditCard', { ...CreditCard, componentType: 'client' }],
   ['Image', { ...Image, componentType: 'client' }],
+  ['GetMoneyList', { ...GetMoneyList, componentType: 'client' }],
   ['ContentBlock', { ...ContentBlock }],
   ['Container', { ...Container }],
   ['ColumnSplitter', { ...ColumnSplitter }],
