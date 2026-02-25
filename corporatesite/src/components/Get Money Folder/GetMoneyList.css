@@ -545,3 +545,5 @@ body, * {
     font-size: 13px;
   }
 }
+.lng-header-container{padding: 10px 20px;}
+.lng-logo-text img{width: 160px;}
